@@ -1,4 +1,4 @@
-##Steps to install
+## Steps to install
 
 1) Clone the repository ```https://github.com/chingu-voyages/v9-bears-team-28.git```.
 
