@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.0.2",
     "axios": "^0.18.0",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.18.3",
@@ -34,7 +35,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "server":"node server/app",
+    "server": "node server/app",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
