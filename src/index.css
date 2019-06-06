@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.card-view-wrapper{
+  margin-left: 7.5%;
+  margin-right: 7.5%;
+  margin-top: 5%;
+}
