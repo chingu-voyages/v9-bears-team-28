@@ -47,13 +47,17 @@ const styles = theme => ({
 
 const options = [{ value: 'one', label: 'Title' }, { value: 'two', label: 'Description' }];
 
-const SortDropdown = () => <Dropdown options={options} placeholder="Select an option" />;
+const SortDropdown = props => (
+	<Dropdown options={options} placeholder="Select an option" value={props.categoryValue} onChange={props.changeCategory} />
+);
 
-const order=[{value:'ascending',label:"Ascending"},{value:'descending',label:"Descending"}]
+const order = [{ value: 'ascending', label: 'Ascending' }, { value: 'descending', label: 'Descending' }];
 
-const OrderSort = () => <Dropdown options={order} placeholder="Select an option" />;
+const OrderSort = props => (
+	<Dropdown options={order} placeholder="Select an option" value={props.orderValue} onChange={props.changeOrder} />
+);
 
-const UtilityRow = ({ classes }) => {
+const UtilityRow = ({ classes, changeCategory, changeOrder,categoryValue,orderValue }) => {
 	return (
 		<Grid container spacing={24}>
 			<Grid item md={5}>
@@ -61,11 +65,11 @@ const UtilityRow = ({ classes }) => {
 			</Grid>
 			<Grid item md={1} />
 			<Grid item md={2}>
-				<SortDropdown />
+				<SortDropdown changeCategory={changeCategory} categoryValue={categoryValue}/>
 			</Grid>
 			<Grid item md={1} />
 			<Grid item md={2}>
-				<OrderSort />
+				<OrderSort changeOrder={changeOrder} orderValue={orderValue}/>
 			</Grid>
 		</Grid>
 	);
@@ -90,12 +94,33 @@ const SearchBox = ({ classes }) => (
 );
 
 class CardView extends Component {
+	state = {
+		categoryValue: 'Title',
+		orderValue: 'Ascending',
+	};
+	changeCategory = option => {
+		console.log('Changing category');
+		console.log(option.label);
+		this.setState({categoryValue:option});
+	};
+	changeOrder = option => {
+		console.log('Changing order');
+		console.log(option.label);
+		this.setState({orderValue:option});
+	};
 	render() {
 		const { classes } = this.props;
+		let { categoryValue, orderValue } = this.state;
 		return (
 			<div className="card-view-wrapper">
-				<UtilityRow classes={classes} />
-				<Grid container spacing={24}>
+				<UtilityRow
+					classes={classes}
+					categoryValue={categoryValue}
+					changeCategory={this.changeCategory}
+					orderValue={orderValue}
+					changeOrder={this.changeOrder}
+				/>
+				<Grid container spacing={12}>
 					<Grid item md={4}>
 						<DataCard
 							description="Project Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped. "
