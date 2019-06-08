@@ -14,7 +14,7 @@ passport.use(
 		},
 		function(accessToken, refreshToken, profile, done) {
 			const searchQuery = {
-				name: profile.displayName
+				user_id: profile.username
 			};
 
 			const updates = {
