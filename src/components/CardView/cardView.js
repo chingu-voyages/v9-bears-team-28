@@ -62,11 +62,11 @@ const OrderSort = props => (
 	<Dropdown options={order} placeholder="Select an option" value={props.orderValue} onChange={props.changeOrder} />
 );
 
-const UtilityRow = ({ classes, changeCategory, changeOrder, categoryValue, orderValue }) => {
+const UtilityRow = ({ classes, changeCategory, changeOrder, categoryValue, orderValue,searchTerm,onChangeSearch }) => {
 	return (
 		<Grid container spacing={24}>
 			<Grid item md={5}>
-				<SearchBox classes={classes} />
+				<SearchBox classes={classes} searchTerm={searchTerm} onChangeSearch={onChangeSearch}/>
 			</Grid>
 			<Grid item md={1} />
 			<Grid item md={2}>
@@ -80,16 +80,15 @@ const UtilityRow = ({ classes, changeCategory, changeOrder, categoryValue, order
 	);
 };
 
-const SearchBox = ({ classes }) => (
+const SearchBox = ({ classes, searchTerm, onChangeSearch }) => (
 	<div className={classes.search}>
 		<div className={classes.searchIcon}>
 			<SearchIcon />
 		</div>
 		<InputBase
 			placeholder="Search project"
-			// value={this.state.searchText}
-			// onChange={this.onSearchTextChange}
-			// onKeyPress={this._handleKeyPress}
+			value={searchTerm}
+			onChange={onChangeSearch}
 			classes={{
 				root: classes.inputRoot,
 				input: classes.inputInput,
@@ -124,22 +123,22 @@ const projects = [
 
 class CardView extends Component {
 	state = {
-		categoryValue:{ value: 'title', label: 'Title' },
+		categoryValue: { value: 'title', label: 'Title' },
 		orderValue: { value: 'ascending', label: 'Ascending' },
-		// projects: projects,
+		searchTerm: '',
 	};
-	componentWillMount(){
-		this.setState({projects:projects},()=>{
+	componentWillMount() {
+		this.setState({ projects: projects, allProjects: projects }, () => {
 			this.sortCategory();
 		});
 	}
 	changeCategory = option => {
-		this.setState({ categoryValue: option },()=>{
+		this.setState({ categoryValue: option }, () => {
 			this.sortCategory();
 		});
 	};
 	changeOrder = option => {
-		this.setState({ orderValue: option,order:option},()=>{
+		this.setState({ orderValue: option, order: option }, () => {
 			this.sortCategory();
 		});
 	};
@@ -158,22 +157,36 @@ class CardView extends Component {
 				var y = b[key];
 				return x < y ? 1 : x > y ? -1 : 0;
 			});
-		}
-		else{
-			console.log("not changing order");
+		} else {
+			console.log('not changing order');
 			console.log(order);
 		}
 	};
-	sortCategory() {
+	sortCategory=()=>{
 		let { projects, categoryValue, orderValue } = this.state;
 		console.log(categoryValue);
 		console.log(orderValue);
 		let data = this.sortArray(projects, categoryValue.value, orderValue.value);
 		this.setState({ projects: data });
 	}
+	searchProjects=(event)=>{
+		console.log(event.target.value);
+		let searchTerm = event.target.value;
+		let { allProjects } = this.state;
+		let projects = [];
+		allProjects.map((project, index) => {
+			if (project.title.includes(searchTerm)) {
+				projects.push(project);
+			}
+			else if (project.description.includes(searchTerm)) {
+				projects.push(project);
+			}
+		});
+		this.setState({ projects: projects,searchTerm:searchTerm });
+	}
 	render() {
 		const { classes } = this.props;
-		let { categoryValue, orderValue } = this.state;
+		let { categoryValue, orderValue, searchTerm } = this.state;
 		const cards = this.state.projects.map((project, index) => (
 			<Grid item md={4}>
 				<DataCard
@@ -191,6 +204,8 @@ class CardView extends Component {
 					changeCategory={this.changeCategory}
 					orderValue={orderValue}
 					changeOrder={this.changeOrder}
+					searchTerm={searchTerm}
+					onChangeSearch={this.searchProjects}
 				/>
 				<Grid container spacing={12}>
 					{cards}
