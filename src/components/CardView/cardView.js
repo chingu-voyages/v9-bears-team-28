@@ -45,10 +45,15 @@ const styles = theme => ({
 	},
 });
 
-const options = [{ value: 'one', label: 'Title' }, { value: 'two', label: 'Description' }];
+const options = [{ value: 'title', label: 'Title' }, { value: 'description', label: 'Description' }];
 
 const SortDropdown = props => (
-	<Dropdown options={options} placeholder="Select an option" value={props.categoryValue} onChange={props.changeCategory} />
+	<Dropdown
+		options={options}
+		placeholder="Select an option"
+		value={props.categoryValue}
+		onChange={props.changeCategory}
+	/>
 );
 
 const order = [{ value: 'ascending', label: 'Ascending' }, { value: 'descending', label: 'Descending' }];
@@ -57,7 +62,7 @@ const OrderSort = props => (
 	<Dropdown options={order} placeholder="Select an option" value={props.orderValue} onChange={props.changeOrder} />
 );
 
-const UtilityRow = ({ classes, changeCategory, changeOrder,categoryValue,orderValue }) => {
+const UtilityRow = ({ classes, changeCategory, changeOrder, categoryValue, orderValue }) => {
 	return (
 		<Grid container spacing={24}>
 			<Grid item md={5}>
@@ -65,11 +70,11 @@ const UtilityRow = ({ classes, changeCategory, changeOrder,categoryValue,orderVa
 			</Grid>
 			<Grid item md={1} />
 			<Grid item md={2}>
-				<SortDropdown changeCategory={changeCategory} categoryValue={categoryValue}/>
+				<SortDropdown changeCategory={changeCategory} categoryValue={categoryValue} />
 			</Grid>
 			<Grid item md={1} />
 			<Grid item md={2}>
-				<OrderSort changeOrder={changeOrder} orderValue={orderValue}/>
+				<OrderSort changeOrder={changeOrder} orderValue={orderValue} />
 			</Grid>
 		</Grid>
 	);
@@ -93,24 +98,91 @@ const SearchBox = ({ classes }) => (
 	</div>
 );
 
+const projects = [
+	{
+		title: 'Project2',
+		description:
+			'Project2 Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped.',
+		image_location:
+			'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
+	},
+	{
+		title: 'Project1',
+		description:
+			'Project1 Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped.',
+		image_location:
+			'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
+	},
+	{
+		title: 'Project3',
+		description:
+			'Project3 Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped.',
+		image_location:
+			'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
+	},
+];
+
 class CardView extends Component {
 	state = {
-		categoryValue: 'Title',
-		orderValue: 'Ascending',
+		categoryValue:{ value: 'title', label: 'Title' },
+		orderValue: { value: 'ascending', label: 'Ascending' },
+		// projects: projects,
 	};
+	componentWillMount(){
+		this.setState({projects:projects},()=>{
+			this.sortCategory();
+		});
+	}
 	changeCategory = option => {
-		console.log('Changing category');
-		console.log(option.label);
-		this.setState({categoryValue:option});
+		this.setState({ categoryValue: option },()=>{
+			this.sortCategory();
+		});
 	};
 	changeOrder = option => {
-		console.log('Changing order');
-		console.log(option.label);
-		this.setState({orderValue:option});
+		this.setState({ orderValue: option,order:option},()=>{
+			this.sortCategory();
+		});
 	};
+	sortArray = (data, key, order) => {
+		key = key.toLowerCase();
+		console.log(key);
+		if (order === 'ascending') {
+			return data.sort(function(a, b) {
+				var x = a[key];
+				var y = b[key];
+				return x < y ? -1 : x > y ? 1 : 0;
+			});
+		} else if (order === 'descending') {
+			return data.sort(function(a, b) {
+				var x = a[key];
+				var y = b[key];
+				return x < y ? 1 : x > y ? -1 : 0;
+			});
+		}
+		else{
+			console.log("not changing order");
+			console.log(order);
+		}
+	};
+	sortCategory() {
+		let { projects, categoryValue, orderValue } = this.state;
+		console.log(categoryValue);
+		console.log(orderValue);
+		let data = this.sortArray(projects, categoryValue.value, orderValue.value);
+		this.setState({ projects: data });
+	}
 	render() {
 		const { classes } = this.props;
 		let { categoryValue, orderValue } = this.state;
+		const cards = this.state.projects.map((project, index) => (
+			<Grid item md={4}>
+				<DataCard
+					title={project.title}
+					description={project.description}
+					image_location={project.image_location}
+				/>
+			</Grid>
+		));
 		return (
 			<div className="card-view-wrapper">
 				<UtilityRow
@@ -121,24 +193,7 @@ class CardView extends Component {
 					changeOrder={this.changeOrder}
 				/>
 				<Grid container spacing={12}>
-					<Grid item md={4}>
-						<DataCard
-							description="Project Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped. "
-							image_location="https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg"
-						/>
-					</Grid>
-					<Grid item md={4}>
-						<DataCard
-							description="Project Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped. "
-							image_location="https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg"
-						/>
-					</Grid>
-					<Grid item md={4}>
-						<DataCard
-							description="Project Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped. "
-							image_location="https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg"
-						/>
-					</Grid>
+					{cards}
 				</Grid>
 			</div>
 		);
