@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import DataCard from '../DataCard/dataCard';
 import Grid from '@material-ui/core/Grid';
-import Dropdown from 'react-dropdown';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import UtilityRow from '../Common/UtilityRow/utilityRow';
 
 const styles = theme => ({
 	search: {
@@ -46,74 +44,13 @@ const styles = theme => ({
 	},
 });
 
-const SortDropdown = props => (
-	<Dropdown
-		options={props.options}
-		placeholder="Select an option"
-		value={props.categoryValue}
-		onChange={props.changeCategory}
-	/>
-);
-
-const OrderSort = props => (
-	<Dropdown
-		options={props.order}
-		placeholder="Select an option"
-		value={props.orderValue}
-		onChange={props.changeOrder}
-	/>
-);
-
-const UtilityRow = ({
-	classes,
-	changeCategory,
-	changeOrder,
-	categoryValue,
-	orderValue,
-	searchTerm,
-	onChangeSearch,
-	options,
-	order,
-}) => {
-	return (
-		<Grid container spacing={24}>
-			<Grid item md={5}>
-				<SearchBox classes={classes} searchTerm={searchTerm} onChangeSearch={onChangeSearch} />
-			</Grid>
-			<Grid item md={1} />
-			<Grid item md={2}>
-				<SortDropdown options={options} changeCategory={changeCategory} categoryValue={categoryValue} />
-			</Grid>
-			<Grid item md={1} />
-			<Grid item md={2}>
-				<OrderSort order={order} changeOrder={changeOrder} orderValue={orderValue} />
-			</Grid>
-		</Grid>
-	);
-};
-
-const SearchBox = ({ classes, searchTerm, onChangeSearch }) => (
-	<div className={classes.search}>
-		<div className={classes.searchIcon}>
-			<SearchIcon />
-		</div>
-		<InputBase
-			placeholder="Search project"
-			value={searchTerm}
-			onChange={onChangeSearch}
-			classes={{
-				root: classes.inputRoot,
-				input: classes.inputInput,
-			}}
-		/>
-	</div>
-);
-
 class CardView extends Component {
 	state = {
 		categoryValue: { value: 'title', label: 'Title' },
 		orderValue: { value: 'ascending', label: 'Ascending' },
 		searchTerm: '',
+		projects:[],
+		allProjects:[]
 	};
 	componentWillMount() {
 		let { projects } = this.props;
@@ -172,7 +109,7 @@ class CardView extends Component {
 		const order = [{ value: 'ascending', label: 'Ascending' }, { value: 'descending', label: 'Descending' }];
 
 		const cards = projects.map((project, index) => (
-			<Grid item md={4}>
+			<Grid item sm={10} md={4}>
 				<DataCard
 					title={project.title}
 					description={project.description}
