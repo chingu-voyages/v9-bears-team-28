@@ -6,6 +6,7 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
 
 const styles = theme => ({
 	search: {
@@ -45,36 +46,47 @@ const styles = theme => ({
 	},
 });
 
-const options = [{ value: 'title', label: 'Title' }, { value: 'description', label: 'Description' }];
-
 const SortDropdown = props => (
 	<Dropdown
-		options={options}
+		options={props.options}
 		placeholder="Select an option"
 		value={props.categoryValue}
 		onChange={props.changeCategory}
 	/>
 );
 
-const order = [{ value: 'ascending', label: 'Ascending' }, { value: 'descending', label: 'Descending' }];
-
 const OrderSort = props => (
-	<Dropdown options={order} placeholder="Select an option" value={props.orderValue} onChange={props.changeOrder} />
+	<Dropdown
+		options={props.order}
+		placeholder="Select an option"
+		value={props.orderValue}
+		onChange={props.changeOrder}
+	/>
 );
 
-const UtilityRow = ({ classes, changeCategory, changeOrder, categoryValue, orderValue,searchTerm,onChangeSearch }) => {
+const UtilityRow = ({
+	classes,
+	changeCategory,
+	changeOrder,
+	categoryValue,
+	orderValue,
+	searchTerm,
+	onChangeSearch,
+	options,
+	order,
+}) => {
 	return (
 		<Grid container spacing={24}>
 			<Grid item md={5}>
-				<SearchBox classes={classes} searchTerm={searchTerm} onChangeSearch={onChangeSearch}/>
+				<SearchBox classes={classes} searchTerm={searchTerm} onChangeSearch={onChangeSearch} />
 			</Grid>
 			<Grid item md={1} />
 			<Grid item md={2}>
-				<SortDropdown changeCategory={changeCategory} categoryValue={categoryValue} />
+				<SortDropdown options={options} changeCategory={changeCategory} categoryValue={categoryValue} />
 			</Grid>
 			<Grid item md={1} />
 			<Grid item md={2}>
-				<OrderSort changeOrder={changeOrder} orderValue={orderValue} />
+				<OrderSort order={order} changeOrder={changeOrder} orderValue={orderValue} />
 			</Grid>
 		</Grid>
 	);
@@ -97,30 +109,6 @@ const SearchBox = ({ classes, searchTerm, onChangeSearch }) => (
 	</div>
 );
 
-const projects = [
-	{
-		title: 'Project2',
-		description:
-			'Project2 Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped.',
-		image_location:
-			'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
-	},
-	{
-		title: 'Project1',
-		description:
-			'Project1 Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped.',
-		image_location:
-			'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
-	},
-	{
-		title: 'Project3',
-		description:
-			'Project3 Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped.',
-		image_location:
-			'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
-	},
-];
-
 class CardView extends Component {
 	state = {
 		categoryValue: { value: 'title', label: 'Title' },
@@ -128,6 +116,7 @@ class CardView extends Component {
 		searchTerm: '',
 	};
 	componentWillMount() {
+		let { projects } = this.props;
 		this.setState({ projects: projects, allProjects: projects }, () => {
 			this.sortCategory();
 		});
@@ -144,7 +133,6 @@ class CardView extends Component {
 	};
 	sortArray = (data, key, order) => {
 		key = key.toLowerCase();
-		console.log(key);
 		if (order === 'ascending') {
 			return data.sort(function(a, b) {
 				var x = a[key];
@@ -157,37 +145,33 @@ class CardView extends Component {
 				var y = b[key];
 				return x < y ? 1 : x > y ? -1 : 0;
 			});
-		} else {
-			console.log('not changing order');
-			console.log(order);
 		}
 	};
-	sortCategory=()=>{
+	sortCategory = () => {
 		let { projects, categoryValue, orderValue } = this.state;
-		console.log(categoryValue);
-		console.log(orderValue);
 		let data = this.sortArray(projects, categoryValue.value, orderValue.value);
 		this.setState({ projects: data });
-	}
-	searchProjects=(event)=>{
-		console.log(event.target.value);
+	};
+	searchProjects = event => {
 		let searchTerm = event.target.value;
 		let { allProjects } = this.state;
 		let projects = [];
 		allProjects.map((project, index) => {
 			if (project.title.includes(searchTerm)) {
 				projects.push(project);
-			}
-			else if (project.description.includes(searchTerm)) {
+			} else if (project.description.includes(searchTerm)) {
 				projects.push(project);
 			}
 		});
-		this.setState({ projects: projects,searchTerm:searchTerm });
-	}
+		this.setState({ projects: projects, searchTerm: searchTerm });
+	};
 	render() {
 		const { classes } = this.props;
-		let { categoryValue, orderValue, searchTerm } = this.state;
-		const cards = this.state.projects.map((project, index) => (
+		let { categoryValue, orderValue, searchTerm, projects } = this.state;
+		const options = [{ value: 'title', label: 'Title' }, { value: 'description', label: 'Description' }];
+		const order = [{ value: 'ascending', label: 'Ascending' }, { value: 'descending', label: 'Descending' }];
+
+		const cards = projects.map((project, index) => (
 			<Grid item md={4}>
 				<DataCard
 					title={project.title}
@@ -196,10 +180,13 @@ class CardView extends Component {
 				/>
 			</Grid>
 		));
+
 		return (
 			<div className="card-view-wrapper">
 				<UtilityRow
 					classes={classes}
+					options={options}
+					order={order}
 					categoryValue={categoryValue}
 					changeCategory={this.changeCategory}
 					orderValue={orderValue}
@@ -215,4 +202,10 @@ class CardView extends Component {
 	}
 }
 
-export default withStyles(styles)(CardView);
+const mapStateToProps = state => {
+	return {
+		projects: state.project.projectList,
+	};
+};
+
+export default connect(mapStateToProps)(withStyles(styles)(CardView));
