@@ -29,7 +29,7 @@ const SearchBox = ({ classes, searchTerm, onChangeSearch }) => (
 			<SearchIcon />
 		</div>
 		<InputBase
-			placeholder="Search project"
+			placeholder="Search here"
 			value={searchTerm}
 			onChange={onChangeSearch}
 			classes={{

@@ -45,6 +45,38 @@ const initialState = {
 			},
 		],
 	},
+	voyage: {
+		voyageList: [
+			{
+				title: 'Voyage-1',
+				description:
+					'Project1 Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped.',
+				image_location:
+					'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
+			},
+			{
+				title: 'Voyage-2',
+				description:
+					'Project2 Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped.',
+				image_location:
+					'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
+			},
+			{
+				title: 'Voyage-3',
+				description:
+					'Project3 Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped.',
+				image_location:
+					'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
+			},
+			{
+				title: 'Voyage-4',
+				description:
+					'Project4 Scope Management refers to the set of processes that ensure a project’s scope is accurately defined and mapped.',
+				image_location:
+					'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
+			},
+		],
+	},
 };
 
 export default initialState;

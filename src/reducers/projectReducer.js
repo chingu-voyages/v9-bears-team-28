@@ -1,4 +1,4 @@
-//reducer for all activity-related
+//reducer for all projects-related
 import * as ACTIONS from "../actions/actionTypes";
 
 const projectReducer = (state = {}, action) => {

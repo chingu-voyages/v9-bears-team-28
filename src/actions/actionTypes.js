@@ -1,1 +1,2 @@
 export const GET_PROJECTS="GET_PROJECTS";
+export const GET_VOYAGES="GET_VOYAGES";

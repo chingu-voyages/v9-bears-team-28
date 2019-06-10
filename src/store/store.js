@@ -1,10 +1,12 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import projectReducer from '../reducers/projectReducer';
+import voyageReducer from '../reducers/voyageReducer';
 import initialState from "./initialState";
 
 const rootReducer = combineReducers({
 	project: projectReducer,
+	voyage:voyageReducer
 });
 
 const middlewares = applyMiddleware(thunk);
