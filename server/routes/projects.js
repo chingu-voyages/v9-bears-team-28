@@ -14,6 +14,19 @@ router.get('/', async (req, res) => {
 	}
 });
 
+router.get('/:voyageId', async (req, res) => {
+	let voyageId = req.params.voyageId;
+	try {
+		const resp = await Project.find({ voyageId: voyageId });
+		if (resp) {
+			return res.status(200).send(resp);
+		}
+		return res.status(400).send({ msg: 'error getting the projects' });
+	} catch (err) {
+		return res.status(400).send(err);
+	}
+});
+
 // router.post('/add-project', async (req, res) => {
 // 	try {
 // 		const newProject = new Project({
@@ -39,7 +52,7 @@ router.put('/:id', async (req, res) => {
 		let id = req.params.id;
 		await Project.findByIdAndUpdate(id, req.body, { new: true }, function(err, model) {
 			if (err) {
-                console.log(err);
+				console.log(err);
 				return res.status(400).send(err);
 			}
 			res.status(200).send(model);

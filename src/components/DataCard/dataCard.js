@@ -22,9 +22,9 @@ const useStyles = makeStyles({
 
 export default function DataCard(props) {
 	const classes = useStyles();
-	const {title,description,image_location}=props;
+	const {title,description,image_location,openVoyage,id}=props;
 	return (
-		<Card className={classes.card}>
+		<Card className={classes.card} onClick={()=>openVoyage(id)}>
 			<CardActionArea>
 				<CardMedia
 					className={classes.media}

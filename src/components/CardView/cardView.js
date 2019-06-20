@@ -5,6 +5,8 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import UtilityRow from '../Common/UtilityRow/utilityRow';
+import { bindActionCreators } from 'redux';
+import * as projectActions from '../../actions/projectActions';
 
 const styles = theme => ({
 	search: {
@@ -49,10 +51,12 @@ class CardView extends Component {
 		categoryValue: { value: 'title', label: 'Title' },
 		orderValue: { value: 'ascending', label: 'Ascending' },
 		searchTerm: '',
-		projects:[],
-		allProjects:[]
+		projects: [],
+		allProjects: [],
 	};
-	componentWillMount() {
+	async componentWillMount() {
+		let id = this.props.match.params.id;
+		await this.props.projectActions.getProjects(id);
 		let { projects } = this.props;
 		this.setState({ projects: projects, allProjects: projects }, () => {
 			this.sortCategory();
@@ -109,12 +113,8 @@ class CardView extends Component {
 		const order = [{ value: 'ascending', label: 'Ascending' }, { value: 'descending', label: 'Descending' }];
 
 		const cards = projects.map((project, index) => (
-			<Grid item sm={10} md={4}>
-				<DataCard
-					title={project.title}
-					description={project.description}
-					image_location={project.image_location}
-				/>
+			<Grid item sm={10} md={4} key={project._id}>
+				<DataCard title={project.title} description={project.description} image_location={project.imageUrl} />
 			</Grid>
 		));
 
@@ -131,8 +131,8 @@ class CardView extends Component {
 					searchTerm={searchTerm}
 					onChangeSearch={this.searchProjects}
 				/>
-				<Grid container spacing={12}>
-					{cards}
+				<Grid container spacing={10}>
+					{cards.length === 0 ? <h3 className="text-center margin-top-5">No results found</h3> : cards }
 				</Grid>
 			</div>
 		);
@@ -142,7 +142,17 @@ class CardView extends Component {
 const mapStateToProps = state => {
 	return {
 		projects: state.project.projectList,
+		error: state.project.error,
 	};
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(CardView));
+const mapActionsToProps = dispatch => {
+	return {
+		projectActions: bindActionCreators(projectActions, dispatch),
+	};
+};
+
+export default connect(
+	mapStateToProps,
+	mapActionsToProps
+)(withStyles(styles)(CardView));

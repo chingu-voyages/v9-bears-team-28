@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const projectSchema = mongoose.Schema({
-  name: {
+  title: {
     type: String,
     default: "",
   },
@@ -16,6 +16,10 @@ const projectSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "voyage",
   },
+  imageUrl:{
+    type:String,
+    default:"https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg"
+  }
 });
 
 module.exports = mongoose.model("projects", projectSchema);

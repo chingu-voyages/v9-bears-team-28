@@ -73,7 +73,7 @@ router.post('/:id/add-project', async (req, res) => {
 	try {
 		let id = req.params.id;
 		const newProject = new Project({
-			name: req.body.name,
+			title: req.body.title,
 			description: req.body.description,
 			deploymentUrl: req.body.deploymentUrl,
 			githubUrl: req.body.githubUrl,

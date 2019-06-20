@@ -8,8 +8,9 @@ class App extends Component {
 		return (
 			<div className="app">
 				<Switch>
-					<Route exact path="/projects-view" component={CardView} />
+					{/* <Route exact path="/projects-view" component={CardView} /> */}
 					<Route exact path="/voyages" component={VoyageView} />
+					<Route path="/voyages/:id" component={CardView} />
 				</Switch>
 			</div>
 		);

@@ -1,10 +1,12 @@
-import React,{Component} from "react";
-import UtilityRow from "../Common/UtilityRow/utilityRow";
+import React, { Component } from 'react';
+import UtilityRow from '../Common/UtilityRow/utilityRow';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
-import DataCard from "../DataCard/dataCard";
+import DataCard from '../DataCard/dataCard';
+import { bindActionCreators } from 'redux';
+import * as voyageActions from '../../actions/voyageActions';
 
 const styles = theme => ({
 	search: {
@@ -44,17 +46,20 @@ const styles = theme => ({
 	},
 });
 
-class VoyageView extends Component{
+class VoyageView extends Component {
 	state = {
 		categoryValue: { value: 'title', label: 'Title' },
 		orderValue: { value: 'ascending', label: 'Ascending' },
 		searchTerm: '',
-		voyages:[],
-		allVoyages:[]
+		voyages: [],
+		allVoyages: [],
+		isLoading: false,
 	};
-	componentWillMount(){
+	async componentWillMount() {
+		this.setState({ isLoading: true });
+		await this.props.voyageActions.getVoyages();
 		let { voyages } = this.props;
-		this.setState({ voyages: voyages, allVoyages: voyages }, () => {
+		this.setState({ voyages: voyages, allVoyages: voyages, isLoading: false }, () => {
 			this.sortCategory();
 		});
 	}
@@ -102,22 +107,37 @@ class VoyageView extends Component{
 		});
 		this.setState({ voyages: voyages, allVoyages: voyages });
 	};
-    render(){
+
+	openVoyage = id => {
+		this.props.history.push('/voyages/' + id);
+	};
+
+	render() {
 		const { classes } = this.props;
 		const options = [{ value: 'title', label: 'Title' }, { value: 'description', label: 'Description' }];
 		const order = [{ value: 'ascending', label: 'Ascending' }, { value: 'descending', label: 'Descending' }];
 		let { categoryValue, orderValue, searchTerm, voyages } = this.state;
-		const cards = voyages.map((voyage, index) => (
-			<Grid item sm={10} md={4}>
-				<DataCard
-					title={voyage.title}
-					description={voyage.description}
-					image_location={voyage.image_location}
-				/>
-			</Grid>
-		));
-        return(
-            <div className="card-view-wrapper">
+
+		if (this.state.isLoading) {
+			return null;
+		}
+
+		let cards = voyages.map((voyage, index) => {
+			return (
+				<Grid key={voyage._id} item sm={10} md={4}>
+					<DataCard
+						title={voyage.name}
+						description={voyage.description}
+						image_location={voyage.imageUrl}
+						openVoyage={this.openVoyage}
+						id={voyage._id}
+					/>
+				</Grid>
+			);
+		});
+
+		return (
+			<div className="card-view-wrapper">
 				<UtilityRow
 					classes={classes}
 					options={options}
@@ -129,12 +149,12 @@ class VoyageView extends Component{
 					searchTerm={searchTerm}
 					onChangeSearch={this.searchVoyages}
 				/>
-				<Grid container spacing={12}>
+				<Grid container spacing={10}>
 					{cards}
 				</Grid>
 			</div>
-        );
-    }
+		);
+	}
 }
 
 const mapStateToProps = state => {
@@ -143,4 +163,13 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(VoyageView));
+const mapActionsToProps = dispatch => {
+	return {
+		voyageActions: bindActionCreators(voyageActions, dispatch),
+	};
+};
+
+export default connect(
+	mapStateToProps,
+	mapActionsToProps
+)(withStyles(styles)(VoyageView));

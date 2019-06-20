@@ -52,7 +52,7 @@ const UtilityRow = ({
 	order,
 }) => {
 	return (
-		<Grid container spacing={24}>
+		<Grid container spacing={10}>
 			<Grid item sm={10} md={4}>
 				<SearchBox classes={classes} searchTerm={searchTerm} onChangeSearch={onChangeSearch} />
 			</Grid>

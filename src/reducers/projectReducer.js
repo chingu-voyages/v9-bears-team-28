@@ -8,6 +8,11 @@ const projectReducer = (state = {}, action) => {
 				...state,
 				projectList: action.payload
 			};
+		case ACTIONS.GET_PROJECTS_ERROR:
+			return {
+				...state,
+				error:action.payload
+			};
 		default:
 			return state;
 	}

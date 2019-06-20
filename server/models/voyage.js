@@ -14,7 +14,11 @@ const projectSchema = mongoose.Schema({
     ref: "users",
   }],
   participationNumber:String,
-  articleLink:String
+  articleLink:String,
+  imageUrl:{
+    type:String,
+    default:"https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg"
+  }
 });
 
 module.exports = mongoose.model("voyages", projectSchema);
