@@ -7,6 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from "react-redux";
 import store from './store/store';
 import 'react-dropdown/style.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
 	<Provider store={store}>
