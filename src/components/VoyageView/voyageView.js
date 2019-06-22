@@ -1,10 +1,21 @@
-import React,{Component} from "react";
-import UtilityRow from "../Common/UtilityRow/utilityRow";
+import React, { Component } from 'react';
+import UtilityRow from '../Common/UtilityRow/utilityRow';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
-import DataCard from "../DataCard/dataCard";
+import DataCard from '../DataCard/dataCard';
+import { bindActionCreators } from 'redux';
+import * as voyageActions from '../../actions/voyageActions';
+import Loading from '../Common/Loading/loading';
+import {
+	ERROR_MESSAGE_VOYAGE_FETCHING,
+	OPTIONS,
+	ORDER,
+	DEFAULT_ORDER_VALUE,
+	DEFAULT_CATEGORY_VALUE,
+} from '../../constants/constant';
+import { sortArrayOfObject } from '../../utils/sort';
 
 const styles = theme => ({
 	search: {
@@ -44,15 +55,16 @@ const styles = theme => ({
 	},
 });
 
-class VoyageView extends Component{
+class VoyageView extends Component {
 	state = {
-		categoryValue: { value: 'title', label: 'Title' },
-		orderValue: { value: 'ascending', label: 'Ascending' },
+		categoryValue: DEFAULT_CATEGORY_VALUE,
+		orderValue: DEFAULT_ORDER_VALUE,
 		searchTerm: '',
-		voyages:[],
-		allVoyages:[]
+		voyages: [],
+		allVoyages: [],
 	};
-	componentWillMount(){
+	async componentWillMount() {
+		await this.props.voyageActions.getVoyages();
 		let { voyages } = this.props;
 		this.setState({ voyages: voyages, allVoyages: voyages }, () => {
 			this.sortCategory();
@@ -68,30 +80,16 @@ class VoyageView extends Component{
 			this.sortCategory();
 		});
 	};
-	sortArray = (data, key, order) => {
-		key = key.toLowerCase();
-		if (order === 'ascending') {
-			return data.sort(function(a, b) {
-				var x = a[key];
-				var y = b[key];
-				return x < y ? -1 : x > y ? 1 : 0;
-			});
-		} else if (order === 'descending') {
-			return data.sort(function(a, b) {
-				var x = a[key];
-				var y = b[key];
-				return x < y ? 1 : x > y ? -1 : 0;
-			});
-		}
-	};
+
 	sortCategory = () => {
 		let { voyages, categoryValue, orderValue } = this.state;
-		let data = this.sortArray(voyages, categoryValue.value, orderValue.value);
+		let data = sortArrayOfObject(voyages, categoryValue.value, orderValue.value);
 		this.setState({ voyages: data });
 	};
 	searchVoyages = event => {
 		let searchTerm = event.target.value;
 		let { allVoyages } = this.state;
+
 		let voyages = [];
 		allVoyages.map((voyage, index) => {
 			if (voyage.title.includes(searchTerm)) {
@@ -102,26 +100,41 @@ class VoyageView extends Component{
 		});
 		this.setState({ voyages: voyages, allVoyages: voyages });
 	};
-    render(){
+
+	openVoyage = id => {
+		this.props.history.push('/voyages/' + id);
+	};
+
+	render() {
 		const { classes } = this.props;
-		const options = [{ value: 'title', label: 'Title' }, { value: 'description', label: 'Description' }];
-		const order = [{ value: 'ascending', label: 'Ascending' }, { value: 'descending', label: 'Descending' }];
-		let { categoryValue, orderValue, searchTerm, voyages } = this.state;
-		const cards = voyages.map((voyage, index) => (
-			<Grid item sm={10} md={4}>
-				<DataCard
-					title={voyage.title}
-					description={voyage.description}
-					image_location={voyage.image_location}
-				/>
-			</Grid>
-		));
-        return(
-            <div className="card-view-wrapper">
+		const { errorFetching, fetched } = this.props;
+		const { categoryValue, orderValue, searchTerm, voyages } = this.state;
+
+		if (!fetched) {
+			return <Loading />;
+		} else if (errorFetching) {
+			return <div className="text-center">{ERROR_MESSAGE_VOYAGE_FETCHING}</div>;
+		}
+		let cards = voyages.map((voyage, index) => {
+			return (
+				<Grid key={voyage._id} item sm={10} md={4}>
+					<DataCard
+						title={voyage.name}
+						description={voyage.description}
+						image_location={voyage.imageUrl}
+						openVoyage={this.openVoyage}
+						id={voyage._id}
+					/>
+				</Grid>
+			);
+		});
+
+		return (
+			<div className="card-view-wrapper">
 				<UtilityRow
 					classes={classes}
-					options={options}
-					order={order}
+					options={OPTIONS}
+					order={ORDER}
 					categoryValue={categoryValue}
 					changeCategory={this.changeCategory}
 					orderValue={orderValue}
@@ -129,18 +142,29 @@ class VoyageView extends Component{
 					searchTerm={searchTerm}
 					onChangeSearch={this.searchVoyages}
 				/>
-				<Grid container spacing={12}>
+				<Grid container spacing={10}>
 					{cards}
 				</Grid>
 			</div>
-        );
-    }
+		);
+	}
 }
 
 const mapStateToProps = state => {
 	return {
 		voyages: state.voyage.voyageList,
+		errorFetching: state.voyage.errorFetching,
+		fetched: state.voyage.fetched,
 	};
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(VoyageView));
+const mapActionsToProps = dispatch => {
+	return {
+		voyageActions: bindActionCreators(voyageActions, dispatch),
+	};
+};
+
+export default connect(
+	mapStateToProps,
+	mapActionsToProps
+)(withStyles(styles)(VoyageView));
