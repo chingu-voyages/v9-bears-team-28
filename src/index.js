@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import store from './store/store';
 import 'react-dropdown/style.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 ReactDOM.render(
 	<Provider store={store}>

@@ -28,6 +28,11 @@ code {
   margin-top: 5%;
 }
 
+.button-center{
+  margin:auto!important;
+  display: block!important;
+}
+
 @media only screen and (max-width: 600px) {
   .order-sort-dropdown{
     margin-left: auto;

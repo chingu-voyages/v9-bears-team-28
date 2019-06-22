@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import CardView from '../CardView/cardView';
 import VoyageView from '../VoyageView/voyageView';
 import { ToastContainer } from 'react-toastify';
-import AdminVoyageCreate from '../AdminVoyageCreate.jsx/adminVoyageCreate';
+import AdminVoyageCreate from '../AdminVoyageCreate/adminVoyageCreate';
 
 class App extends Component {
 	render() {
