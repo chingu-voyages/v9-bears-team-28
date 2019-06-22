@@ -8,4 +8,6 @@ const projects = require("./projects");
 router.use("/voyages", voyages);
 router.use("/projects", projects);
 
+router.use("/users", require("./users"));
+
 module.exports = router;
