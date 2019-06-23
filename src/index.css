@@ -33,6 +33,11 @@ code {
   display: block!important;
 }
 
+.btn-oval{
+  border: 2px solid rgba(108, 89, 179, 0.75);
+  border-radius: 40px!important;
+}
+
 @media only screen and (max-width: 600px) {
   .order-sort-dropdown{
     margin-left: auto;
