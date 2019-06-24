@@ -5,6 +5,9 @@ import {API_URL} from "../constants/constant";
 
 export const getVoyages= ()=>async dispatch=>{
     try{
+        dispatch({
+            type:ACTIONS.LOADING_GET_VOYAGES
+        });
         const resp=await axios.get(API_URL+"/voyages");
         console.log(resp);
         dispatch({

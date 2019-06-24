@@ -2,26 +2,36 @@ import React, { useState } from 'react';
 import FormField from '../Common/FormField/formField';
 import DatePicker from '../Common/DatePicker/datePicker';
 import './adminVoyageCreate.css';
+import { API_URL } from '../../constants/constant';
+import { toast } from 'react-toastify';
+import Axios from 'axios';
 
-function validateForm(fields) {
-	let { title, description } = fields;
-	return title && description ? true : false;
+function validateForm(name, description) {
+	return name && description ? true : false;
 }
 
 export default function AdminVoyageCreate() {
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
+	const [name, setName] = useState('');
+	const [description, setDescription] = useState('');
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date());
 
-	const submitVoyageForm = event => {
+	const submitVoyageForm = async event => {
 		event.preventDefault();
-		const valid = validateForm(title, description);
+		const valid = validateForm(name, description);
 		if (valid) {
-			console.log({ title, description, startDate, endDate });
+			let state = { name, description, startDate, endDate };
+			try {
+				const resp = await Axios.post(API_URL + '/voyages',  state );
+				console.log(resp);
+				toast.success('Voyage created successfully', { autoClose: 2000 });
+			} catch (err) {
+				console.log(err);
+				toast.error('Error creating voyage', { autoClose: 2000 });
+			}
 		} else {
 			console.log('Invalid value');
-			console.log({ title, description, startDate, endDate });
+			console.log({ name, description, startDate, endDate });
 		}
 	};
 
@@ -30,7 +40,7 @@ export default function AdminVoyageCreate() {
 			<div className="card create-voyage-card">
 				<h3 className="text-center mb-5">Create voyage</h3>
 				<form className="create-voyage-form" onSubmit={submitVoyageForm}>
-					<FormField title="Voyage title" placeholder="title" type="text" value={title} onChange={setTitle} />
+					<FormField title="Voyage title" placeholder="title" type="text" value={name} onChange={setName} />
 					<FormField
 						title="Voyage description"
 						placeholder="Info about the voyage"

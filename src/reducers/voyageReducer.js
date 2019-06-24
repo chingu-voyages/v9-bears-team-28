@@ -3,7 +3,7 @@ import * as ACTIONS from "../actions/actionTypes";
 
 const voyageReducer = (state = {}, action) => {
 	switch (action.type) {
-		case ACTIONS.GET_VOYAGES_LOADING:
+		case ACTIONS.LOADING_GET_VOYAGES:
 			return{
 				...state,
 				fetched:false
