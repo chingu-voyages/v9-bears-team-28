@@ -20,6 +20,21 @@ const voyageReducer = (state = {}, action) => {
 				errorFetching:true,
 				fetched:true
 			}
+		case ACTIONS.DELETE_VOYAGE:
+			return{
+				...state,
+				voyageDeleting:false
+			}
+		case ACTIONS.LOADING_DELETE_VOYAGE:
+			return{
+				...state,
+				voyageDeleting:true
+			}
+		case ACTIONS.ERROR_DELETE_VOYAGE:
+			return{
+				...state,
+				voyageDeleting:true
+			}
 		default:
 			return state;
 	}
