@@ -29,7 +29,7 @@ class AdminVoyageView extends Component {
 	};
 
 	closeDeleteModal = () => {
-		console.log("Clicked on delete modal")
+		console.log('Clicked on delete modal');
 		this.setState({ isDeleteModalOpen: false, data: null });
 	};
 
@@ -47,9 +47,9 @@ class AdminVoyageView extends Component {
 		}
 	};
 
-	editVoyage=async ()=>{
-		this.props.history.push("/admin/voyage-edit/");
-	}
+	editVoyage = async voyage => {
+		this.props.history.push('/admin/edit-voyage/' + voyage._id);
+	};
 
 	render() {
 		const { errorFetching, fetched, voyages: dataFromProps } = this.props;
@@ -70,7 +70,7 @@ class AdminVoyageView extends Component {
 					{submitted ? (
 						<span>
 							Deleting
-							<CircularProgress style={{marginLeft:"5px",width:25,height:25}} />
+							<CircularProgress style={{ marginLeft: '5px', width: 25, height: 25 }} />
 						</span>
 					) : (
 						'Confirm'
@@ -83,8 +83,8 @@ class AdminVoyageView extends Component {
 		);
 
 		const tableBody = dataFromProps.map((data, index) => {
-			let startDate=moment(data.startDate).format('MMMM Do YYYY');
-			let endDate=moment(data.endDate).format('MMMM Do YYYY');
+			let startDate = moment(data.startDate).format('MMMM Do YYYY');
+			let endDate = moment(data.endDate).format('MMMM Do YYYY');
 			return (
 				<tr key={index}>
 					<td>{data.name || ''}</td>
@@ -93,7 +93,7 @@ class AdminVoyageView extends Component {
 					<td>{data.participationNumber || 'None'}</td>
 					<td>
 						{' '}
-						<span onClick={this.editVoyage}>
+						<span onClick={() => this.editVoyage(data)}>
 							<EditIcon />
 						</span>
 						<span onClick={() => this.openDeleteModal(data)}>

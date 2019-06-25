@@ -5,6 +5,7 @@ import VoyageView from '../VoyageView/voyageView';
 import { ToastContainer } from 'react-toastify';
 import AdminVoyageCreate from '../AdminVoyageCreate/adminVoyageCreate';
 import AdminVoyageView from '../AdminVoyageView/adminVoyageView';
+import AdminVoyageEdit from '../AdminVoyageEdit/adminVoyageEdit';
 
 class App extends Component {
 	render() {
@@ -17,6 +18,7 @@ class App extends Component {
 					<Route path="/voyages/:id" component={CardView} />
 					<Route path="/admin/create-voyage" component={AdminVoyageCreate} />
 					<Route path="/admin/view-voyages" component={AdminVoyageView} />
+					<Route path="/admin/edit-voyage/:id" component={AdminVoyageEdit} />
 				</Switch>
 			</div>
 		);

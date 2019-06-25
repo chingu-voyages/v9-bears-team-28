@@ -63,6 +63,7 @@ class VoyageView extends Component {
 		voyages: [],
 		allVoyages: [],
 	};
+	
 	async componentWillMount() {
 		await this.props.voyageActions.getVoyages();
 		let { voyages } = this.props;
@@ -70,11 +71,13 @@ class VoyageView extends Component {
 			this.sortCategory();
 		});
 	}
+
 	changeCategory = option => {
 		this.setState({ categoryValue: option }, () => {
 			this.sortCategory();
 		});
 	};
+
 	changeOrder = option => {
 		this.setState({ orderValue: option, order: option }, () => {
 			this.sortCategory();
@@ -86,6 +89,7 @@ class VoyageView extends Component {
 		let data = sortArrayOfObject(voyages, categoryValue.value, orderValue.value);
 		this.setState({ voyages: data });
 	};
+
 	searchVoyages = event => {
 		let searchTerm = event.target.value;
 		let { allVoyages } = this.state;

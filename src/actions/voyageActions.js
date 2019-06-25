@@ -43,3 +43,24 @@ export const deleteVoyage = id => async dispatch => {
 		toast.error('Something went wrong. Please try again later.', { autoClose: 2000 });
 	}
 };
+
+export const getSingleVoyage = id => async dispatch => {
+	try {
+		dispatch({
+			type: ACTIONS.GET_SINGLE_VOYAGE_LOADING,
+		});
+		const resp = await axios.get(API_URL + '/voyages/' + id);
+		console.log(resp);
+		dispatch({
+			type: ACTIONS.GET_SINGLE_VOYAGE,
+			payload:resp.data
+		});
+	} catch (err) {
+		console.log(err);
+		dispatch({
+			type: ACTIONS.GET_SINGLE_VOYAGE_ERROR,
+			payload: err,
+		});
+		toast.error('Something went wrong. Please try again later.', { autoClose: 2000 });
+	}
+};
