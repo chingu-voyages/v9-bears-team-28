@@ -7,6 +7,7 @@ import { Grid } from '@material-ui/core';
 import DataCard from '../DataCard/dataCard';
 import { connect } from 'react-redux';
 import MemberCard from '../Common/MemberCard/memberCard';
+import TeamActivity from "./TeamActivity/teamActivity";
 
 class TeamPage extends Component {
 	render() {
@@ -78,10 +79,11 @@ class TeamPage extends Component {
 				<TeamName name="Bears-team-28" />
 				<Heading title="Projects by team" />
 				<TeamProjects projects={this.props.projectList} />
-				{/* <TeamActivity />*/}
+				<Heading title="Teams's activity" />
+				<TeamActivity />
 				<Heading title="Meet the team" />
 				<MeetTheTeam />
-				<Heading title="Projects by team" />
+				<Heading title="Perform actions" />
 				<Actions />
 			</div>
 		);
