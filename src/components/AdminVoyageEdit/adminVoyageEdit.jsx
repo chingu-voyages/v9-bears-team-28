@@ -21,11 +21,10 @@ class AdminVoyageEdit extends Component {
 	}
 	componentWillReceiveProps(newProps) {
 		const { single_voyage_fetched, voyage, errorFetching } = newProps;
-		console.log("Triggered");
 		let prev_single_voyage_fetched=this.props.single_voyage_fetched;
+		
 		if (prev_single_voyage_fetched!==single_voyage_fetched&&single_voyage_fetched && !errorFetching) {
 			const { name, description, startDate, endDate,_id } = voyage;
-			console.log('Inside');
 			this.setState({ name, description, startDate, endDate,_id });
 		}
 	}
