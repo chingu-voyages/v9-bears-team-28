@@ -7,11 +7,11 @@ import { Grid } from '@material-ui/core';
 import DataCard from '../DataCard/dataCard';
 import { connect } from 'react-redux';
 import MemberCard from '../Common/MemberCard/memberCard';
-import TeamActivity from "./TeamActivity/teamActivity";
+import TeamActivity from './TeamActivity/teamActivity';
 
 class TeamPage extends Component {
 	render() {
-		const Heading = ({ title }) => <h2 className="text-center mt-5">{title}</h2>;
+		const Heading = ({ title }) => <h2 className="text-center mt-5 mb-5">{title}</h2>;
 
 		const TeamName = ({ name }) => (
 			<div class="image-container">
