@@ -2,7 +2,6 @@
 import * as ACTIONS from "../actions/actionTypes";
 
 const voyageReducer = (state = {}, action) => {
-	console.log(action);
 	switch (action.type) {
 		case ACTIONS.LOADING_GET_VOYAGES:
 			return{
@@ -41,18 +40,34 @@ const voyageReducer = (state = {}, action) => {
 			return{
 				...state,
 				voyage:action.payload,
-				fetched:true
+				single_voyage_fetched:true
 			}
 		case ACTIONS.GET_SINGLE_VOYAGE_ERROR:
 			return{
 				...state,
-				fetched:true,
+				single_voyage_fetched:true,
 				errorFetching:true
 			}
 		case ACTIONS.GET_SINGLE_VOYAGE_LOADING:
 			return{
 				...state,
-				fetched:false
+				single_voyage_fetched:false
+			}
+		case ACTIONS.EDIT_VOYAGE:
+			return{
+				...state,
+				edit_fetched:true
+			}
+		case ACTIONS.EDIT_VOYAGE_ERROR:
+			return{
+				...state,
+				edit_fetched:true,
+				errorFetching:true
+			}
+		case ACTIONS.EDIT_VOYAGE_LOADING:
+			return{
+				...state,
+				edit_fetched:false
 			}
 		default:
 			return state;

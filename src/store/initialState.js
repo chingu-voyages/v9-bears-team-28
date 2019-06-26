@@ -76,6 +76,8 @@ const initialState = {
 					'https://www.simplilearn.com/ice9/free_resources_article_thumb/Project-Scope-Management-Cover.jpg',
 			},
 		],
+		single_voyage_fetched:false,
+		fetched:false
 	},
 };
 
