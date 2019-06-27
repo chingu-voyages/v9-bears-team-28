@@ -21,9 +21,9 @@ function getValidRows(result) {
 		}
 		validRows = validRows + 1;
 	}
-    result = result.slice(0, validRows);
-    console.log(result);
-    return {result,validRows};
+	result = result.slice(0, validRows);
+	console.log(result);
+	return { result, validRows };
 }
 
 router.get('/', function(req, res) {
@@ -46,9 +46,9 @@ router.post('/xlstojson', function(req, res) {
 				if (err) {
 					res.json(err);
 				} else {
-                    let resp = getValidRows(result);
-                    result=resp.result;
-                    let validRows=resp.validRows;
+					let resp = getValidRows(result);
+					result = resp.result;
+					let validRows = resp.validRows;
 					res.json({ result, validRows });
 				}
 			}
