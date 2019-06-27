@@ -68,7 +68,7 @@ class AdminVoyageView extends Component {
 				<div className="description">Are you sure you want to delete this modal?</div>
 				<Button variant="contained" color="primary" onClick={this.deleteVoyage} className="action-btn">
 					{submitted ? (
-						<span>
+						<span>	
 							Deleting
 							<CircularProgress style={{ marginLeft: '5px', width: 25, height: 25 }} />
 						</span>
