@@ -10,8 +10,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { toast } from 'react-toastify';
 import CustomModal from '../Common/Modal/modal';
 import { Button } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import moment from 'moment';
+import { UploadButton } from '../Common/UploadButton/uploadButton';
 
 class AdminVoyageView extends Component {
 	state = {
@@ -66,16 +66,12 @@ class AdminVoyageView extends Component {
 		const customComponent = (
 			<div className="modal-custom-component">
 				<div className="description">Are you sure you want to delete this modal?</div>
-				<Button variant="contained" color="primary" onClick={this.deleteVoyage} className="action-btn">
-					{submitted ? (
-						<span>	
-							Deleting
-							<CircularProgress style={{ marginLeft: '5px', width: 25, height: 25 }} />
-						</span>
-					) : (
-						'Confirm'
-					)}
-				</Button>
+				<UploadButton
+					title="Confirm"
+					submittingTitle="Deleting"
+					onClick={this.deleteVoyage}
+					submitted={submitted}
+				/>
 				<Button variant="contained" color="secondary" onClick={this.closeDeleteModal} className="action-btn">
 					Cancel
 				</Button>
