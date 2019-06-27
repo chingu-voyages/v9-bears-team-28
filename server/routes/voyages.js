@@ -15,6 +15,21 @@ router.get('/', async (req, res) => {
 	}
 });
 
+router.get('/:id', async (req, res) => {
+	try {
+		const id = req.params.id;
+		console.log(id);
+		const resp = await Voyage.findOne({ _id: id });
+		console.log(resp);
+		if (resp) {
+			return res.status(200).send(resp);
+		}
+		return res.status(400).send({ msg: 'error getting the voyage' });
+	} catch (err) {
+		return res.status(400).send(err);
+	}
+});
+
 router.post('/', async (req, res) => {
 	try {
 		const newVoyage = new Voyage({
@@ -33,6 +48,7 @@ router.post('/', async (req, res) => {
 			console.log(error);
 		}
 	} catch (err) {
+		console.log(err);
 		return res.status(400).send(err);
 	}
 });

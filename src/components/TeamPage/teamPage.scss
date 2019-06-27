@@ -1,0 +1,33 @@
+.team-page{
+    margin:5%;
+    margin-left: 2.5%;
+}
+
+.image-container {
+    position: relative;
+    height:40vh;
+    img{
+        height:40vh;
+    }
+
+    .text-block {
+        position: absolute;
+        top:50%;
+        left:30%;
+        color: white;
+        padding-left: 20px;
+        padding-right: 20px;
+        
+        h1{
+            font-size:5rem;
+        }
+    }
+}
+
+.actions-wrap{
+    display: flex;
+    justify-content: center;
+}
+.symbol-card{
+    padding: 2%;
+}
