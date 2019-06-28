@@ -3,6 +3,7 @@ import MemberCard from '../Common/MemberCard/memberCard';
 import { Grid } from '@material-ui/core';
 import { connect } from 'react-redux';
 import ActivityTimeline from './ActivityTimeline/activityTimeline';
+import ProjectLog from './ProjectLog/projectLog';
 
 const TeamMembers = ({members}) => {
     const allMembers = members.map((member, index) => (
@@ -28,9 +29,10 @@ class ProjectPage extends Component {
         const {members}=this.props;
 		return (
 			<div className="project-page">
-				<ActivityTimeline />
+				{/* <ActivityTimeline /> */}
 				<TeamMembers members={members}/>
-				{/* <Sprints />
+                <ProjectLog />
+				{/* <ProjectLogs />
 				<AdditionalInfo />
 				<Comments /> */}
 			</div>
