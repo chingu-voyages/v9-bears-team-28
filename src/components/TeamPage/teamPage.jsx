@@ -77,12 +77,12 @@ class TeamPage extends Component {
 		return (
 			<div className="team-page">
 				<TeamName name="Bears-team-28" />
+				<Heading title="Meet the team" />
+				<MeetTheTeam />
 				<Heading title="Projects by team" />
 				<TeamProjects projects={this.props.projectList} />
 				<Heading title="Teams's activity" />
 				<TeamActivity />
-				<Heading title="Meet the team" />
-				<MeetTheTeam />
 				<Heading title="Perform actions" />
 				<Actions />
 			</div>
