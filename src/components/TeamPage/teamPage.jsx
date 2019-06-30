@@ -8,11 +8,10 @@ import DataCard from '../DataCard/dataCard';
 import { connect } from 'react-redux';
 import MemberCard from '../Common/MemberCard/memberCard';
 import TeamActivity from './TeamActivity/teamActivity';
+import Heading from "../Common/Heading/heading";
 
 class TeamPage extends Component {
 	render() {
-		const Heading = ({ title }) => <h2 className="text-center mt-5 mb-5">{title}</h2>;
-
 		const TeamName = ({ name }) => (
 			<div class="image-container">
 				<img src="https://www.w3schools.com/howto/img_nature_wide.jpg" alt="Norway" style={{ width: '100%' }} />
