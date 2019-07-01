@@ -8,6 +8,7 @@ const useStyles = makeStyles({
 	card: {
 		width: 250,
 		height: 150,
+		cursor: 'pointer',
 	},
 	bullet: {
 		display: 'inline-block',
@@ -23,22 +24,20 @@ const useStyles = makeStyles({
 	},
 	container: {
 		marginBottom: 10,
-  },
-  description:{
-    marginTop:10
-  }
+	},
+	description: {
+		marginTop: 10,
+	},
 });
 
 export default function SymbolCard(props) {
 	const classes = useStyles();
 	return (
-		<Card className={classes.card}>
+		<Card className={classes.card} onClick={props.onClick}>
 			<CardContent>
 				<div className="text-center heading">
 					<div className={classes.container}>{props.symbol}</div>
-					<Typography component="h5">
-						{props.title}
-					</Typography>
+					<Typography component="h5">{props.title}</Typography>
 				</div>
 				<div className={classes.description}>
 					<Typography variant="body2" component="p">

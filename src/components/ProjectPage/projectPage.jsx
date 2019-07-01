@@ -29,10 +29,15 @@ const TeamMembers = ({ members }) => {
 	);
 };
 
-const Actions = () => (
+const Actions = ({editProject}) => (
 	<div className="actions-wrap">
 		<div className="symbol-card">
-			<SymbolCard symbol={<EditIcon />} title="Edit info" description="Edit info about your project" />
+			<SymbolCard
+				symbol={<EditIcon />}
+				title="Edit info"
+				description="Edit info about your project"
+				onClick={editProject}
+			/>
 		</div>
 		<div className="symbol-card">
 			<SymbolCard
@@ -59,6 +64,10 @@ class ProjectPage extends Component {
 		let id = this.props.match.params.id;
 		this.props.projectActions.getSingleProject(id);
 	}
+	editProject=()=>{
+		let id = this.props.match.params.id;
+		this.props.history.push("/edit-project/"+id);
+	}
 	render() {
 		console.log(this.props);
 		const { projectFeteched, projectErrorInFetching } = this.props;
@@ -79,7 +88,7 @@ class ProjectPage extends Component {
 				<Heading title="Review info about the project" />
 				<AdditionalInfo project={project} />
 				<Heading title="Additional options" />
-				<Actions />
+				<Actions editProject={this.editProject}/>
 				<Heading title="Comments on your projects" />
 				<Comments />
 			</div>

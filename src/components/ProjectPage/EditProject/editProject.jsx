@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as projectActions from '../../../actions/projectActions';
 import Loading from '../../Common/Loading/loading';
 import { ERROR_MESSAGE_VOYAGE_FETCHING } from '../../../constants/constant';
+import { UploadButton } from '../../Common/UploadButton/uploadButton';
 
 class EditProject extends Component {
 	state = {
@@ -13,26 +14,50 @@ class EditProject extends Component {
 		githubUrl: '',
 		deploymentUrl: '',
 		image: '',
+		submitted: false,
 	};
 	componentWillMount() {
 		let id = this.props.match.params.id;
-		this.props.projectActions.getSingleProject(id);
+		console.log(id);
+		if (!this.props.projectFeteched) {
+			this.props.projectActions.getSingleProject(id);
+		}
 	}
-	setTitle(title) {
+	componentWillReceiveProps(newProps) {
+		const { project, projectFeteched, projectErrorInFetching } = newProps;
+		let prev_projectFeteched = this.props.projectFeteched;
+
+		if (prev_projectFeteched !== projectFeteched && projectFeteched && !projectErrorInFetching) {
+			const { title, description, githubUrl, deploymentUrl, _id } = project;
+			this.setState({ title, description, githubUrl, deploymentUrl, _id });
+		}
+	}
+	setTitle = title => {
 		this.setState({ title });
-	}
-	setDescription(description) {
+	};
+	setDescription = description => {
 		this.setState({ description });
-	}
-	setGithubUrl(githubUrl) {
+	};
+	setGithubUrl = githubUrl => {
 		this.setState({ githubUrl });
-	}
-	setDeploymentUrl(deploymentUrl) {
+	};
+	setDeploymentUrl = deploymentUrl => {
 		this.setState({ deploymentUrl });
-	}
-	setImage(image) {
+	};
+	setImage = image => {
 		this.setState({ image });
-	}
+	};
+	submitVoyageForm = async () => {
+		// event.preventDefault();
+		this.setState({ submitted: true });
+		const { title, description, githubUrl, deploymentUrl, _id } = this.state;
+		const data = { title, description, githubUrl, deploymentUrl };
+		await this.props.projectActions.updateProject(_id, data);
+		setTimeout(() => {
+			this.setState({ submitted: false });
+			this.props.history.push('/project/' + _id);
+		}, 2000);
+	};
 	render() {
 		const { projectFeteched, projectErrorInFetching } = this.props;
 		if (!projectFeteched) {
@@ -40,22 +65,17 @@ class EditProject extends Component {
 		} else if (projectErrorInFetching) {
 			return <div className="text-center">{ERROR_MESSAGE_VOYAGE_FETCHING}</div>;
 		}
-		const submitVoyageForm = event => {
-			event.preventDefault();
-			// const { title, description, githubUrl, deploymentUrl } = this.state;
-			console.log(this.state);
-		};
-		const { name, description, githubUrl, deploymentUrl, image } = this.state;
+		const { title, description, githubUrl, deploymentUrl, submitted } = this.state;
 		return (
 			<div className="create-project">
 				<div className="card create-voyage-card">
 					<h3 className="text-center mb-5">Edit project</h3>
-					<form className="create-voyage-form" onSubmit={submitVoyageForm}>
+					<form className="create-voyage-form">
 						<FormField
 							title="Project title"
 							placeholder="title"
 							type="text"
-							value={name}
+							value={title}
 							onChange={this.setTitle}
 						/>
 						<FormField
@@ -80,9 +100,12 @@ class EditProject extends Component {
 							onChange={this.setDeploymentUrl}
 						/>
 						<div className="col-xs-10 col-md-5 col-lg-2 btn-lg button-center">
-							<button type="submit" className="btn btn-primary btn-block btn-oval">
-								Submit
-							</button>
+							<UploadButton
+								title="Update"
+								submittingTitle="Updating"
+								submitted={submitted}
+								onClick={this.submitVoyageForm}
+							/>
 						</div>
 					</form>
 				</div>

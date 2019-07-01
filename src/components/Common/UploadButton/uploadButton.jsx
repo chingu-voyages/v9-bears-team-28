@@ -11,7 +11,7 @@ export const UploadButton = ({ title, submittingTitle, submitted, onClick }) => 
 						<CircularProgress style={{ marginLeft: '5px', width: 25, height: 25 }} />
 					</span>
 				) : (
-					{ title }
+					title
 				)}
 			</Button>
 		</div>

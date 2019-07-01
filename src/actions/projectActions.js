@@ -41,11 +41,13 @@ export const getSingleProject=(projectId)=>async dispatch=>{
 }
 
 export const updateProject=(projectId,data)=>async dispatch=>{
+    console.log(projectId);
+    console.log(data);
     try{
         dispatch({
             type:ACTIONS.UPDATE_PROJECT_LOADING
         });
-        const resp=axios.put(API_URL+"/projects/single-project/"+projectId,data);
+        const resp=axios.put(API_URL+"/projects/"+projectId,data);
         console.log(resp);
         dispatch({
             type:ACTIONS.UPDATE_PROJECT,

@@ -24,7 +24,7 @@ class App extends Component {
 					<Route path="/admin/edit-voyage/:id" component={AdminVoyageEdit} />
 					<Route path="/team" component={TeamPage} />
 					<Route path="/project/:id" component={ProjectPage} />
-					<Route path="/edit-project" component={EditProject} />
+					<Route path="/edit-project/:id" component={EditProject} />
 				</Switch>
 			</div>
 		);
