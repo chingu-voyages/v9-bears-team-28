@@ -6,11 +6,15 @@ import ActivityTimeline from './ActivityTimeline/activityTimeline';
 import ProjectLog from './ProjectLog/projectLog';
 import AdditionalInfo from './AdditionalInfo/additionalInfo';
 import Heading from '../Common/Heading/heading';
-import './projectPage.scss';
 import Comments from './Comments/comments';
 import SymbolCard from '../Common/SymbolCard/symbolCard';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
+import './projectPage.scss';
+import Loading from '../Common/Loading/loading';
+import { ERROR_MESSAGE_VOYAGE_FETCHING } from '../../constants/constant';
+import { bindActionCreators } from 'redux';
+import * as projectActions from "../../actions/projectActions";
 
 const TeamMembers = ({ members }) => {
 	const allMembers = members.map((member, index) => (
@@ -57,8 +61,19 @@ const Actions = () => (
 );
 
 class ProjectPage extends Component {
+	componentWillMount(){
+		let id=this.props.match.params.id;
+		this.props.projectActions.getSingleProject(id);
+	}
 	render() {
-		const { members } = this.props;
+		console.log(this.props);
+		const { projectFeteched, projectErrorInFetching } = this.props;
+		if (!projectFeteched) {
+			return <Loading />;
+		} else if (projectErrorInFetching) {
+			return <div className="text-center">{ERROR_MESSAGE_VOYAGE_FETCHING}</div>;
+		}
+		const { members, project } = this.props;
 		return (
 			<div className="project-page">
 				<Heading title="View project timeline" />
@@ -68,7 +83,7 @@ class ProjectPage extends Component {
 				<Heading title="Project sprint logs" />
 				<ProjectLog />
 				<Heading title="Review info about the project" />
-				<AdditionalInfo />
+				<AdditionalInfo project={project}/>
 				<Heading title="Additional options" />
 				<Actions />
 				<Heading title="Comments on your projects" />
@@ -80,9 +95,17 @@ class ProjectPage extends Component {
 
 const mapStateToProps = state => {
 	return {
-		projectList: state.project.projectList,
+		project: state.project.project,
+		projectFeteched: state.project.projectFeteched,
+		projectErrorInFetching: state.project.projectErrorInFetching,
 		members: state.project.members,
 	};
 };
 
-export default connect(mapStateToProps)(ProjectPage);
+const mapActionsToProps = dispatch => {
+	return {
+		projectActions: bindActionCreators(projectActions, dispatch),
+	};
+};
+
+export default connect(mapStateToProps,mapActionsToProps)(ProjectPage);

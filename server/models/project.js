@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+const commentSchema=new mongoose.Schema({
+	title:String,
+	description:String,
+	createdAt:String,
+	updatedAt:String,
+	createdBy:{type:mongoose.Schema.Types.ObjectId,ref:'users'}
+});
+
 const projectSchema = mongoose.Schema({
 	title: {
 		type: String,
@@ -30,6 +38,8 @@ const projectSchema = mongoose.Schema({
 			endDate: String,
 		},
 	],
+	comments:[commentSchema],
+	keywords:[{type:String}]
 });
 
 module.exports = mongoose.model('projects', projectSchema);

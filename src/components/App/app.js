@@ -8,6 +8,7 @@ import AdminVoyageView from '../AdminVoyageView/adminVoyageView';
 import AdminVoyageEdit from '../AdminVoyageEdit/adminVoyageEdit';
 import TeamPage from '../TeamPage/teamPage';
 import ProjectPage from '../ProjectPage/projectPage';
+import EditProject from '../ProjectPage/EditProject/editProject';
 
 class App extends Component {
 	render() {
@@ -22,7 +23,8 @@ class App extends Component {
 					<Route path="/admin/view-voyages" component={AdminVoyageView} />
 					<Route path="/admin/edit-voyage/:id" component={AdminVoyageEdit} />
 					<Route path="/team" component={TeamPage} />
-					<Route path="/project" component={ProjectPage} />
+					<Route path="/project/:id" component={ProjectPage} />
+					<Route path="/edit-project" component={EditProject} />
 				</Switch>
 			</div>
 		);

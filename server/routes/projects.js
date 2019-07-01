@@ -14,6 +14,19 @@ router.get('/', async (req, res) => {
 	}
 });
 
+router.get('/single-project/:id', async (req, res) => {
+	let id=req.params.id;
+	try {
+		const resp = await Project.findOne({_id:id});
+		if (resp) {
+			return res.status(200).send(resp);
+		}
+		return res.status(400).send({ msg: 'error getting the projects' });
+	} catch (err) {
+		return res.status(400).send(err);
+	}
+});
+
 router.get('/:voyageId', async (req, res) => {
 	let voyageId = req.params.voyageId;
 	try {
@@ -97,9 +110,22 @@ router.put('/:id/edit-sprint', async (req, res) => {
 		let id = req.params.id;
 		let sprintUpdated = req.body.sprint;
 		const project = Project.findOne({ _id: id });
-		project.sprints=sprintUpdated;
+		project.sprints = sprintUpdated;
 		await project.save();
 		res.status(200).send({ message: 'Project is successfully updated' });
+	} catch (err) {
+		return res.status(400).send(err);
+	}
+});
+
+router.post('/:id/add-comment', async (req, res) => {
+	try {
+		let id = req.params.id;
+		let comments = req.body.comments;
+		const project = Project.findOne({ _id: id });
+		project.comments = comments;
+		await project.save();
+		res.status(200).send({ message: 'Comments successfully added' });
 	} catch (err) {
 		return res.status(400).send(err);
 	}

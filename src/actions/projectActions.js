@@ -18,3 +18,44 @@ export const getProjects=(voyageId)=>async dispatch=>{
         });
     }
 }
+
+export const getSingleProject=(projectId)=>async dispatch=>{
+    try{
+        dispatch({
+            type:ACTIONS.GET_SINGLE_PROJECT_LOADING
+        });
+        const resp=await axios.get(API_URL+"/projects/single-project/"+projectId);
+        console.log("Here");
+        console.log(resp);
+        dispatch({
+            type:ACTIONS.GET_SINGLE_PROJECT,
+            payload:resp.data
+        });
+    }catch(err){
+        console.log(err);
+        dispatch({
+            type:ACTIONS.GET_SINGLE_PROJECT_ERROR,
+            payload:err
+        })
+    }
+}
+
+export const updateProject=(projectId,data)=>async dispatch=>{
+    try{
+        dispatch({
+            type:ACTIONS.UPDATE_PROJECT_LOADING
+        });
+        const resp=axios.put(API_URL+"/projects/single-project/"+projectId,data);
+        console.log(resp);
+        dispatch({
+            type:ACTIONS.UPDATE_PROJECT,
+            payload:resp.data
+        });
+    }catch(err){
+        console.log(err);
+        dispatch({
+            type:ACTIONS.UPDATE_PROJECT_ERROR,
+            payload:err
+        })
+    }
+}
