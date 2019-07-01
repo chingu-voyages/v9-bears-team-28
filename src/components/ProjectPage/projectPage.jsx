@@ -14,18 +14,12 @@ import './projectPage.scss';
 import Loading from '../Common/Loading/loading';
 import { ERROR_MESSAGE_VOYAGE_FETCHING } from '../../constants/constant';
 import { bindActionCreators } from 'redux';
-import * as projectActions from "../../actions/projectActions";
+import * as projectActions from '../../actions/projectActions';
 
 const TeamMembers = ({ members }) => {
 	const allMembers = members.map((member, index) => (
-		<Grid item md={4}>
-			<MemberCard
-				key={index}
-				name={member.name}
-				role={member.role}
-				imageUrl={member.imageUrl}
-				info={member.info}
-			/>
+		<Grid item md={4} key={index}>
+			<MemberCard name={member.name} role={member.role} imageUrl={member.imageUrl} info={member.info} />
 		</Grid>
 	));
 	return (
@@ -61,8 +55,8 @@ const Actions = () => (
 );
 
 class ProjectPage extends Component {
-	componentWillMount(){
-		let id=this.props.match.params.id;
+	componentWillMount() {
+		let id = this.props.match.params.id;
 		this.props.projectActions.getSingleProject(id);
 	}
 	render() {
@@ -83,7 +77,7 @@ class ProjectPage extends Component {
 				<Heading title="Project sprint logs" />
 				<ProjectLog />
 				<Heading title="Review info about the project" />
-				<AdditionalInfo project={project}/>
+				<AdditionalInfo project={project} />
 				<Heading title="Additional options" />
 				<Actions />
 				<Heading title="Comments on your projects" />
@@ -108,4 +102,7 @@ const mapActionsToProps = dispatch => {
 	};
 };
 
-export default connect(mapStateToProps,mapActionsToProps)(ProjectPage);
+export default connect(
+	mapStateToProps,
+	mapActionsToProps
+)(ProjectPage);

@@ -36,7 +36,7 @@ export default function SymbolCard(props) {
 			<CardContent>
 				<div className="text-center heading">
 					<div className={classes.container}>{props.symbol}</div>
-					<Typography variant="title" component="h5">
+					<Typography component="h5">
 						{props.title}
 					</Typography>
 				</div>

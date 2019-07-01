@@ -21,7 +21,7 @@ const ActivityTimeline = props => (
 	<Timeline lineColor={'#ddd'}>
 		{
 			activites.map((activity,index)=>(
-				<Activity title={activity.title} subtitle={activity.subtitle} description={activity.description} />
+				<Activity key={index} title={activity.title} subtitle={activity.subtitle} description={activity.description} />
 			))
 		}
 	</Timeline>

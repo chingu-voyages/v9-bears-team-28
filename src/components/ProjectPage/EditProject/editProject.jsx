@@ -42,7 +42,7 @@ class EditProject extends Component {
 		}
 		const submitVoyageForm = event => {
 			event.preventDefault();
-			const { title, description, githubUrl, deploymentUrl } = this.state;
+			// const { title, description, githubUrl, deploymentUrl } = this.state;
 			console.log(this.state);
 		};
 		const { name, description, githubUrl, deploymentUrl, image } = this.state;
