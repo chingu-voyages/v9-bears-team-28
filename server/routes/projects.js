@@ -79,4 +79,30 @@ router.put('/:id', async (req, res) => {
 // 	}
 // });
 
+router.post('/:id/add-sprint', async (req, res) => {
+	try {
+		let id = req.params.id;
+		let sprint = req.body.sprint;
+		const project = Project.findOne({ _id: id });
+		project.sprints.push(sprint);
+		await project.save();
+		res.status(200).send({ message: 'Project is successfully created' });
+	} catch (err) {
+		return res.status(400).send(err);
+	}
+});
+
+router.put('/:id/edit-sprint', async (req, res) => {
+	try {
+		let id = req.params.id;
+		let sprintUpdated = req.body.sprint;
+		const project = Project.findOne({ _id: id });
+		project.sprints=sprintUpdated;
+		await project.save();
+		res.status(200).send({ message: 'Project is successfully updated' });
+	} catch (err) {
+		return res.status(400).send(err);
+	}
+});
+
 module.exports = router;

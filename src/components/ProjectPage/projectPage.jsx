@@ -43,6 +43,16 @@ const Actions = () => (
 				description="Submit a ticker for reasons like lost partner etc"
 			/>
 		</div>
+		<div className="symbol-card">
+			<SymbolCard symbol={<EditIcon />} title="Edit info" description="Edit sprint" />
+		</div>
+		<div className="symbol-card">
+			<SymbolCard
+				symbol={<AddIcon />}
+				title="Add sprint log"
+				description="Add the next sprint log for your project"
+			/>
+		</div>
 	</div>
 );
 
