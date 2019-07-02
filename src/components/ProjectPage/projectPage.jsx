@@ -17,6 +17,7 @@ import { bindActionCreators } from 'redux';
 import * as projectActions from '../../actions/projectActions';
 import CustomModal from '../Common/Modal/modal';
 import SprintAdd from './SprintAdd/sprintAdd';
+import EditSprint from './EditSprint/editSprint';
 
 const TeamMembers = ({ members }) => {
 	const allMembers = members.map((member, index) => (
@@ -31,7 +32,7 @@ const TeamMembers = ({ members }) => {
 	);
 };
 
-const Actions = ({ editProject, addSprint }) => (
+const Actions = ({ editProject, addSprint, editSprint }) => (
 	<div className="actions-wrap">
 		<div className="symbol-card">
 			<SymbolCard
@@ -49,7 +50,7 @@ const Actions = ({ editProject, addSprint }) => (
 			/>
 		</div>
 		<div className="symbol-card">
-			<SymbolCard symbol={<EditIcon />} title="Edit info" description="Edit sprint" />
+			<SymbolCard symbol={<EditIcon />} title="Edit info" description="Edit sprint" onClick={editSprint} />
 		</div>
 		<div className="symbol-card">
 			<SymbolCard
@@ -75,13 +76,13 @@ class ProjectPage extends Component {
 		let id = this.props.match.params.id;
 		this.props.history.push('/edit-project/' + id);
 	};
-	addSprint=()=>{
-		this.setState({isAddSprintModal:true});
-	}
-	closeAddSprintModal=()=>{
-		this.setState({isAddSprintModal:false});
-	}
-	confirmAddSprint=async (state)=>{
+	addSprint = () => {
+		this.setState({ isAddSprintModal: true });
+	};
+	closeAddSprintModal = () => {
+		this.setState({ isAddSprintModal: false });
+	};
+	confirmAddSprint = async state => {
 		this.setState({ submitted: true });
 		let _id = this.props.match.params.id;
 		const { title, description, startDate, endDate } = state;
@@ -93,9 +94,23 @@ class ProjectPage extends Component {
 			this.setState({ submitted: false });
 			window.location.href = '/project/' + _id;
 		}, 2000);
-	}
+	};
+
+	confirmEditSprint = (allSprints) => {
+		let id = this.props.match.params.id;
+		this.props.projectActions.editSprint(id,allSprints);
+	};
+
+	editSprint = () => {
+		this.setState({ isEditSprintModal: true });
+	};
+
+	closeEditSprintModal = () => {
+		this.setState({ isEditSprintModal: false });
+	};
+
 	render() {
-		const { isAddSprintModal } = this.state;
+		const { isAddSprintModal, isEditSprintModal } = this.state;
 		const { projectFeteched, projectErrorInFetching } = this.props;
 		if (!projectFeteched) {
 			return <Loading />;
@@ -109,10 +124,15 @@ class ProjectPage extends Component {
 				<CustomModal
 					isModalOpen={isAddSprintModal}
 					closeModal={this.closeAddSprintModal}
-					customComponent={<SprintAdd _id={project._id} confirmAddSprint={this.confirmAddSprint}/>}
+					customComponent={<SprintAdd _id={project._id} confirmAddSprint={this.confirmAddSprint} />}
+				/>
+				<CustomModal
+					isModalOpen={isEditSprintModal}
+					closeModal={this.closeEditSprintModal}
+					customComponent={<EditSprint project={project} confirmEditSprint={this.confirmEditSprint} />}
 				/>
 				<Heading title="View project timeline" />
-				<ActivityTimeline logs={project.sprints}/>
+				<ActivityTimeline logs={project.sprints} />
 				<Heading title="Project contributors" />
 				<TeamMembers members={members} />
 				<Heading title="Project sprint logs" />
@@ -120,7 +140,7 @@ class ProjectPage extends Component {
 				<Heading title="Review info about the project" />
 				<AdditionalInfo project={project} />
 				<Heading title="Additional options" />
-				<Actions editProject={this.editProject} addSprint={this.addSprint} confirmAddSprint={this.confirmAddSprint}/>
+				<Actions editProject={this.editProject} addSprint={this.addSprint} editSprint={this.editSprint} />
 				<Heading title="Comments on your projects" />
 				<Comments />
 			</div>
