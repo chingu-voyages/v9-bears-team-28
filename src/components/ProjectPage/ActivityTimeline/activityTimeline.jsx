@@ -1,30 +1,36 @@
 import React from 'react';
 import { Timeline, TimelineItem } from 'vertical-timeline-component-for-react';
+import moment from 'moment';
 
-const activites=[{
-	title:"Title, Company",
-	subtitle:"subtitle",
-	description:" Est incididunt sint eu minim dolore mollit velit velit commodo ex nulla exercitation. Veniam velit adipisicing anim excepteur nostrud magna nostrud aliqua dolor. Sunt aute est duis ut nulla officia irure reprehenderit laborum fugiat dolore in elit. Adipisicing do qui duis Loremest."
-}];
-
-const Activity=({title,subtitle,description})=>(
-	<TimelineItem key="001" dateText="11/2010 – Present" style={{ color: '#e86971' }}>
-			<h3>{title}</h3>
-			<h4>{subtitle}</h4>
-			<p>
-				{description}
-			</p>
-		</TimelineItem>
-)
-
-const ActivityTimeline = props => (
-	<Timeline lineColor={'#ddd'}>
-		{
-			activites.map((activity,index)=>(
-				<Activity key={index} title={activity.title} subtitle={activity.subtitle} description={activity.description} />
-			))
-		}
-	</Timeline>
+const Activity = ({ title, subtitle, description }) => (
+	<TimelineItem key="001" dateText={subtitle} style={{ color: '#e86971' }}>
+		<h4>{title}</h4>
+		<p>{description}</p>
+	</TimelineItem>
 );
+
+const ActivityTimeline = props => {
+	console.log(props);
+	return (
+		<Timeline lineColor={'#ddd'}>
+			{props.logs.map((activity, index) => {
+				if (activity) {
+					let { startDate, endDate } = activity;
+					let start = moment(startDate).format('MMMM Do YYYY');
+					let end = moment(endDate).format('MMMM Do YYYY');
+					let subtitle = 'From ' + start + ' to ' + end;
+					return (
+						<Activity
+							key={index}
+							title={activity.title}
+							subtitle={subtitle}
+							description={activity.description}
+						/>
+					);
+				}
+			})}
+		</Timeline>
+	);
+};
 
 export default ActivityTimeline;

@@ -48,7 +48,6 @@ class EditProject extends Component {
 		this.setState({ image });
 	};
 	submitVoyageForm = async () => {
-		// event.preventDefault();
 		this.setState({ submitted: true });
 		const { title, description, githubUrl, deploymentUrl, _id } = this.state;
 		const data = { title, description, githubUrl, deploymentUrl };

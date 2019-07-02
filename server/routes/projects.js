@@ -96,11 +96,15 @@ router.post('/:id/add-sprint', async (req, res) => {
 	try {
 		let id = req.params.id;
 		let sprint = req.body.sprint;
-		const project = Project.findOne({ _id: id });
+		console.log(req.body);
+		const project = await Project.findOne({ _id: id });
+		console.log(project);
 		project.sprints.push(sprint);
+		console.log(project);
 		await project.save();
 		res.status(200).send({ message: 'Project is successfully created' });
 	} catch (err) {
+		console.log(err);
 		return res.status(400).send(err);
 	}
 });

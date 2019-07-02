@@ -15,6 +15,8 @@ import Loading from '../Common/Loading/loading';
 import { ERROR_MESSAGE_VOYAGE_FETCHING } from '../../constants/constant';
 import { bindActionCreators } from 'redux';
 import * as projectActions from '../../actions/projectActions';
+import CustomModal from '../Common/Modal/modal';
+import SprintAdd from './SprintAdd/sprintAdd';
 
 const TeamMembers = ({ members }) => {
 	const allMembers = members.map((member, index) => (
@@ -29,7 +31,7 @@ const TeamMembers = ({ members }) => {
 	);
 };
 
-const Actions = ({editProject}) => (
+const Actions = ({ editProject, addSprint }) => (
 	<div className="actions-wrap">
 		<div className="symbol-card">
 			<SymbolCard
@@ -54,22 +56,46 @@ const Actions = ({editProject}) => (
 				symbol={<AddIcon />}
 				title="Add sprint log"
 				description="Add the next sprint log for your project"
+				onClick={addSprint}
 			/>
 		</div>
 	</div>
 );
 
 class ProjectPage extends Component {
+	state = {
+		isAddSprintModal: false,
+		isEditSprintModal: false,
+	};
 	componentWillMount() {
 		let id = this.props.match.params.id;
 		this.props.projectActions.getSingleProject(id);
 	}
-	editProject=()=>{
+	editProject = () => {
 		let id = this.props.match.params.id;
-		this.props.history.push("/edit-project/"+id);
+		this.props.history.push('/edit-project/' + id);
+	};
+	addSprint=()=>{
+		this.setState({isAddSprintModal:true});
+	}
+	closeAddSprintModal=()=>{
+		this.setState({isAddSprintModal:false});
+	}
+	confirmAddSprint=async (state)=>{
+		this.setState({ submitted: true });
+		let _id = this.props.match.params.id;
+		const { title, description, startDate, endDate } = state;
+		const data = { title, description, startDate, endDate };
+		console.log(data);
+		console.log(_id);
+		await this.props.projectActions.addSprint(_id, data);
+		setTimeout(() => {
+			this.setState({ submitted: false });
+			window.location.href = '/project/' + _id;
+		}, 2000);
 	}
 	render() {
-		console.log(this.props);
+		const { isAddSprintModal } = this.state;
 		const { projectFeteched, projectErrorInFetching } = this.props;
 		if (!projectFeteched) {
 			return <Loading />;
@@ -77,10 +103,16 @@ class ProjectPage extends Component {
 			return <div className="text-center">{ERROR_MESSAGE_VOYAGE_FETCHING}</div>;
 		}
 		const { members, project } = this.props;
+		console.log(project);
 		return (
 			<div className="project-page">
+				<CustomModal
+					isModalOpen={isAddSprintModal}
+					closeModal={this.closeAddSprintModal}
+					customComponent={<SprintAdd _id={project._id} confirmAddSprint={this.confirmAddSprint}/>}
+				/>
 				<Heading title="View project timeline" />
-				<ActivityTimeline />
+				<ActivityTimeline logs={project.sprints}/>
 				<Heading title="Project contributors" />
 				<TeamMembers members={members} />
 				<Heading title="Project sprint logs" />
@@ -88,7 +120,7 @@ class ProjectPage extends Component {
 				<Heading title="Review info about the project" />
 				<AdditionalInfo project={project} />
 				<Heading title="Additional options" />
-				<Actions editProject={this.editProject}/>
+				<Actions editProject={this.editProject} addSprint={this.addSprint} confirmAddSprint={this.confirmAddSprint}/>
 				<Heading title="Comments on your projects" />
 				<Comments />
 			</div>
