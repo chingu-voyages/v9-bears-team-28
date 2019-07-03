@@ -15,9 +15,11 @@ import Loading from '../Common/Loading/loading';
 import { ERROR_MESSAGE_VOYAGE_FETCHING } from '../../constants/constant';
 import { bindActionCreators } from 'redux';
 import * as projectActions from '../../actions/projectActions';
+import * as ticketActions from '../../actions/ticketActions';
 import CustomModal from '../Common/Modal/modal';
 import SprintAdd from './SprintAdd/sprintAdd';
 import EditSprint from './EditSprint/editSprint';
+import TicketModal from '../Tickets/TicketsModal/ticketsModal';
 
 const TeamMembers = ({ members }) => {
 	const allMembers = members.map((member, index) => (
@@ -32,7 +34,7 @@ const TeamMembers = ({ members }) => {
 	);
 };
 
-const Actions = ({ editProject, addSprint, editSprint }) => (
+const Actions = ({ editProject, addSprint, editSprint, addTicket }) => (
 	<div className="actions-wrap">
 		<div className="symbol-card">
 			<SymbolCard
@@ -47,6 +49,7 @@ const Actions = ({ editProject, addSprint, editSprint }) => (
 				symbol={<AddIcon />}
 				title="Submit a ticket"
 				description="Submit a ticker for reasons like lost partner etc"
+				onClick={addTicket}
 			/>
 		</div>
 		<div className="symbol-card">
@@ -67,6 +70,7 @@ class ProjectPage extends Component {
 	state = {
 		isAddSprintModal: false,
 		isEditSprintModal: false,
+		isAddTicketModalOpen: false,
 	};
 	componentWillMount() {
 		let id = this.props.match.params.id;
@@ -82,13 +86,18 @@ class ProjectPage extends Component {
 	closeAddSprintModal = () => {
 		this.setState({ isAddSprintModal: false });
 	};
+	openAddTicket = () => {
+		this.setState({ isAddTicketModalOpen: true });
+	};
+	closeAddTicketModal = () => {
+		this.setState({ isAddTicketModalOpen: false });
+	};
+
 	confirmAddSprint = async state => {
 		this.setState({ submitted: true });
 		let _id = this.props.match.params.id;
 		const { title, description, startDate, endDate } = state;
 		const data = { title, description, startDate, endDate };
-		console.log(data);
-		console.log(_id);
 		await this.props.projectActions.addSprint(_id, data);
 		setTimeout(() => {
 			this.setState({ submitted: false });
@@ -115,8 +124,18 @@ class ProjectPage extends Component {
 		this.setState({ isEditSprintModal: false });
 	};
 
+	addTicket=async (ticket)=>{
+		console.log(ticket);
+		this.setState({ submitted: true });
+		await this.props.ticketActions.addTicket(ticket);
+		setTimeout(() => {
+			this.setState({ submitted: false });
+			this.closeAddTicketModal();
+		}, 2000);
+	}
+
 	render() {
-		const { isAddSprintModal, isEditSprintModal, submitted } = this.state;
+		const { isAddSprintModal, isEditSprintModal, submitted, isAddTicketModalOpen } = this.state;
 		const { projectFeteched, projectErrorInFetching } = this.props;
 		if (!projectFeteched) {
 			return <Loading />;
@@ -145,6 +164,11 @@ class ProjectPage extends Component {
 						/>
 					}
 				/>
+				<CustomModal
+					isModalOpen={isAddTicketModalOpen}
+					closeModal={this.closeAddTicketModal}
+					customComponent={<TicketModal addTicket={this.addTicket} submitted={submitted} />}
+				/>
 				<Heading title="View project timeline" />
 				<ActivityTimeline logs={project.sprints} />
 				<Heading title="Project contributors" />
@@ -154,7 +178,7 @@ class ProjectPage extends Component {
 				<Heading title="Review info about the project" />
 				<AdditionalInfo project={project} />
 				<Heading title="Additional options" />
-				<Actions editProject={this.editProject} addSprint={this.addSprint} editSprint={this.editSprint} />
+				<Actions editProject={this.editProject} addSprint={this.addSprint} editSprint={this.editSprint} addTicket={this.openAddTicket}/>
 				<Heading title="Comments on your projects" />
 				<Comments />
 			</div>
@@ -174,6 +198,7 @@ const mapStateToProps = state => {
 const mapActionsToProps = dispatch => {
 	return {
 		projectActions: bindActionCreators(projectActions, dispatch),
+		ticketActions:bindActionCreators(ticketActions,dispatch)
 	};
 };
 
