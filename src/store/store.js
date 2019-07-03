@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 import projectReducer from '../reducers/projectReducer';
 import voyageReducer from '../reducers/voyageReducer';
 import initialState from "./initialState";
+import ticketReducer from '../reducers/ticketReducer';
 
 const rootReducer = combineReducers({
 	project: projectReducer,
-	voyage:voyageReducer
+	voyage:voyageReducer,
+	ticket:ticketReducer
 });
 
 const middlewares = applyMiddleware(thunk);

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import TicketCard from '../Common/TicketCard/ticketCard';
+import { bindActionCreators } from 'redux';
+import {connect} from "react-redux";
+import * as ticketActions from "../../actions/ticketActions";
 import './ticketsAdminView.scss';
 
 const tickets=[{
@@ -22,4 +25,22 @@ class TicketsAdminView extends Component {
 	}
 }
 
-export default TicketsAdminView;
+const mapStateToProps = state => {
+	return {
+		ticket: state.ticket.ticket,
+		ticketFeteched: state.project.ticketFeteched,
+		ticketErrorInFetching: state.project.ticketErrorInFetching,
+	};
+};
+
+const mapActionsToProps = dispatch => {
+	return {
+		ticketActions: bindActionCreators(ticketActions, dispatch),
+	};
+};
+
+export default connect(
+	mapStateToProps,
+	mapActionsToProps
+)(TicketsAdminView);
+

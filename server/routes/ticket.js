@@ -18,8 +18,6 @@ router.post('/', async (req, res) => {
 	const newTicket = new Ticket({
 		title: req.body.title,
 		description: req.body.description,
-		startDate: req.body.startDate,
-		endDate: req.body.endDate,
 		createdBy: req.body.userId,
 	});
 	try {
