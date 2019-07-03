@@ -18,6 +18,10 @@ const useStyles = makeStyles({
 	media: {
 		height: 140,
 	},
+	small: {
+		fontSize: '0.75rem',
+		paddingLeft:16
+	},
 });
 
 export default function TicketCard(props) {
@@ -30,12 +34,16 @@ export default function TicketCard(props) {
 					<Typography gutterBottom variant="h5" component="h2">
 						{title}
 					</Typography>
-					<Typography variant="subtitle2">Anshul Dubey, Bears-team-28</Typography>
+					<Typography variant="subtitle2" color="textPrimary">
+						Anshul Dubey, Bears-team-28
+					</Typography>
+
 					<Typography variant="body2" component="p" color="textSecondary">
 						{description}
 					</Typography>
 				</CardContent>
 			</CardActionArea>
+			<small className={classes.small}>Status: {props.status}</small>
 			<CardActions>
 				<Button size="small" color="primary">
 					<DoneIcon />

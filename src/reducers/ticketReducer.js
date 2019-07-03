@@ -20,6 +20,23 @@ const ticketReducer = (state = {}, action) => {
 				ticketErrorInFetching:true,
 				ticketFeteched:true
 			}
+		case ACTIONS.GET_TICKETS_LOADING:
+			return{
+				...state,
+				ticketFeteched:false
+			}
+		case ACTIONS.GET_TICKETS:
+			return {
+				...state,
+				ticket: action.payload,
+				ticketFeteched:true
+			};
+		case ACTIONS.GET_TICKETS_ERROR:
+			return{
+				...state,
+				ticketErrorInFetching:true,
+				ticketFeteched:true
+			}
 		default:
 			return state;
 	}
