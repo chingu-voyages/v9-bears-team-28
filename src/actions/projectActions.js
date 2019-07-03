@@ -82,3 +82,23 @@ export const addSprint = (id, sprint) => async dispatch => {
 	}
 };
 
+export const editSprint = (id, sprints) => async dispatch => {
+	try {
+		dispatch({
+			type: ACTIONS.EDIT_SPRINTS_LOADING,
+		});
+		const resp = await axios.put(API_URL + '/projects/' + id + '/edit-sprint', {sprints:sprints});
+		console.log(resp);
+		dispatch({
+			type: ACTIONS.EDIT_SPRINTS,
+			payload: resp.data,
+		});
+	} catch (err) {
+		console.log(err);
+		dispatch({
+			type: ACTIONS.EDIT_SPRINTS_ERROR,
+			payload: err,
+		});
+	}
+};
+

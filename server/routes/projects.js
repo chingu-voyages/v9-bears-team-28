@@ -98,9 +98,7 @@ router.post('/:id/add-sprint', async (req, res) => {
 		let sprint = req.body.sprint;
 		console.log(req.body);
 		const project = await Project.findOne({ _id: id });
-		console.log(project);
 		project.sprints.push(sprint);
-		console.log(project);
 		await project.save();
 		res.status(200).send({ message: 'Project is successfully created' });
 	} catch (err) {
@@ -112,8 +110,9 @@ router.post('/:id/add-sprint', async (req, res) => {
 router.put('/:id/edit-sprint', async (req, res) => {
 	try {
 		let id = req.params.id;
-		let sprintUpdated = req.body.sprint;
-		const project = Project.findOne({ _id: id });
+		let sprintUpdated = req.body.sprints;
+		console.log(sprintUpdated);
+		const project = await Project.findOne({ _id: id });
 		project.sprints = sprintUpdated;
 		await project.save();
 		res.status(200).send({ message: 'Project is successfully updated' });
@@ -126,7 +125,7 @@ router.post('/:id/add-comment', async (req, res) => {
 	try {
 		let id = req.params.id;
 		let comments = req.body.comments;
-		const project = Project.findOne({ _id: id });
+		const project = await Project.findOne({ _id: id });
 		project.comments = comments;
 		await project.save();
 		res.status(200).send({ message: 'Comments successfully added' });

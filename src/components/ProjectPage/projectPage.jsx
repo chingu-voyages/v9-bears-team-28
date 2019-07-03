@@ -96,9 +96,15 @@ class ProjectPage extends Component {
 		}, 2000);
 	};
 
-	confirmEditSprint = (allSprints) => {
+	confirmEditSprint = async allSprints => {
+		this.setState({ submitted: true });
 		let id = this.props.match.params.id;
-		this.props.projectActions.editSprint(id,allSprints);
+		console.log(allSprints);
+		await this.props.projectActions.editSprint(id, allSprints);
+		setTimeout(() => {
+			this.setState({ submitted: false });
+			window.location.href = '/project/' + id;
+		}, 2000);
 	};
 
 	editSprint = () => {
@@ -110,7 +116,7 @@ class ProjectPage extends Component {
 	};
 
 	render() {
-		const { isAddSprintModal, isEditSprintModal } = this.state;
+		const { isAddSprintModal, isEditSprintModal, submitted } = this.state;
 		const { projectFeteched, projectErrorInFetching } = this.props;
 		if (!projectFeteched) {
 			return <Loading />;
@@ -124,12 +130,20 @@ class ProjectPage extends Component {
 				<CustomModal
 					isModalOpen={isAddSprintModal}
 					closeModal={this.closeAddSprintModal}
-					customComponent={<SprintAdd _id={project._id} confirmAddSprint={this.confirmAddSprint} />}
+					customComponent={
+						<SprintAdd _id={project._id} confirmAddSprint={this.confirmAddSprint} submitted={submitted} />
+					}
 				/>
 				<CustomModal
 					isModalOpen={isEditSprintModal}
 					closeModal={this.closeEditSprintModal}
-					customComponent={<EditSprint project={project} confirmEditSprint={this.confirmEditSprint} />}
+					customComponent={
+						<EditSprint
+							project={project}
+							confirmEditSprint={this.confirmEditSprint}
+							submitted={submitted}
+						/>
+					}
 				/>
 				<Heading title="View project timeline" />
 				<ActivityTimeline logs={project.sprints} />
