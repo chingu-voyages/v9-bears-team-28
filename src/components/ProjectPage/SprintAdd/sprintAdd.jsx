@@ -24,8 +24,8 @@ class SprintAdd extends Component {
 	};
 	render() {
 		const { setTitle, setDescription, setStartDate, setEndDate } = this;
-        const { title, description, startDate, endDate, submitted } = this.state;
-        const {confirmAddSprint}=this.props;
+		const { title, description, startDate, endDate } = this.state;
+		const { confirmAddSprint, submitted } = this.props;
 		return (
 			<div className="sprint-add">
 				<h3 className="text-center mb-5">Add sprint</h3>
@@ -51,7 +51,7 @@ class SprintAdd extends Component {
 							title="Update sprint"
 							submittingTitle="Updating"
 							submitted={submitted}
-							onClick={()=>confirmAddSprint(this.state)}
+							onClick={() => confirmAddSprint(this.state)}
 						/>
 					</div>
 				</form>
